@@ -32,12 +32,7 @@ jobs:
       - name: Build Windows Executable
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
-          pyinstaller -F "Buondua Downloader.py" \
-            --icon "杰瑞.ico" \
-            --name "Buondua-Downloader-${{ matrix.os }}.exe" \
-            --distpath "dist/${{ matrix.os }}" \
-            --workpath "build/${{ matrix.os }}" \
-            --specpath "spec/${{ matrix.os }}"
+          pyinstaller -F "Buondua Downloader.py" --icon "杰瑞.ico" --name "Buondua-Downloader-${{ matrix.os }}.exe" --distpath "dist/${{ matrix.os }}" --workpath "build/${{ matrix.os }}" --specpath "spec/${{ matrix.os }}"
     
       - name: Build Non-Windows Executable
         if: ${{ matrix.os != 'windows-latest' }}
