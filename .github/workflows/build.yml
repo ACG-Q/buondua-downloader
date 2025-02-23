@@ -54,6 +54,7 @@ jobs:
           path: dist/${{ matrix.os }}/
 
   Release:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
