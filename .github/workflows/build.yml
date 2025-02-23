@@ -10,7 +10,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,14 +29,47 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build
+      - name: Build Windows Executable
+        if: ${{ matrix.os == 'windows-latest' }}
         run: |
-          pyinstaller -F "Buondua Downloader.py" --icon 杰瑞.ico
+          pyinstaller -F "Buondua Downloader.py" \
+            --icon "杰瑞.ico" \
+            --name "Buondua-Downloader-${{ matrix.os }}.exe" \
+            --distpath "dist/${{ matrix.os }}" \
+            --workpath "build/${{ matrix.os }}" \
+            --specpath "spec/${{ matrix.os }}"
+    
+      - name: Build Non-Windows Executable
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: |
+          pyinstaller -F "Buondua Downloader.py" \
+            --name "Buondua-Downloader-${{ matrix.os }}" \
+            --distpath "dist/${{ matrix.os }}" \
+            --workpath "build/${{ matrix.os }}" \
+            --specpath "spec/${{ matrix.os }}"
+      
+      - name: Fix Permissions (Non-Windows)
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: chmod +x "dist/${{ matrix.os}}/"*
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-binaries
+          path: dist/${{ matrix.os }}/
+
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/*
+          files: artifacts/**/*
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
           draft: false
