@@ -1,4 +1,4 @@
-# ºËÐÄÒÀÀµ
-requests>=2.31.0           # HTTPÇëÇó¿â
-beautifulsoup4>=4.12.3     # HTML½âÎö¿â
-PyYAML>=6.0.1              # YAMLÎÄ¼þ´¦Àí
+# æ ¸å¿ƒä¾èµ–
+requests>=2.31.0           # HTTPè¯·æ±‚åº“
+beautifulsoup4>=4.12.3     # HTMLè§£æžåº“
+PyYAML>=6.0.1              # YAMLæ–‡ä»¶å¤„ç†
